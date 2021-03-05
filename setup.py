@@ -1,5 +1,4 @@
 from setuptools import setup
-from cicdtest import __version__
 import os
 import re
 
