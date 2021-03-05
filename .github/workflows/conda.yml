@@ -75,7 +75,7 @@ jobs:
             conda_build/**.tar.bz2
 
   upload-conda:
-    needs: [build-conda, build-python]
+    needs: [build-conda, upload-python]
     runs-on: ubuntu-latest
     container:
       image: continuumio/anaconda3:latest
