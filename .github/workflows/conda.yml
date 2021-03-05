@@ -20,10 +20,29 @@ jobs:
       - name: Upload build artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: dist
+          name: python-dist
+          retention-days: 1
           path: |
             dist/*.tar.gz
             dist/*.whl
+
+  test-python:
+    needs: build-python
+    runs-on: ubuntu-latest
+    container:
+      image: python:3.6-slim
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Download build artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: python-dist
+      - name: Run unit tests
+        run : |
+          ls -lah
+          python -m pip install .
+          python -m unittest discover
 #
 #  build-python2:
 #    runs-on: ubuntu-latest
