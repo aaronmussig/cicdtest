@@ -20,7 +20,8 @@ jobs:
       - name: Install dependencies
         run: |
           npm install semantic-release @semantic-release/git @semantic-release/changelog @semantic-release/exec
-          npx semantic-release --generate-notes false --dry-run
+          npx semantic-release
+#          npx semantic-release --generate-notes false --dry-run
 #      - name: Release
 #        env:
 #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
