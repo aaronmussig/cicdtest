@@ -17,7 +17,7 @@ def readme():
 
 
 meta = read_meta()
-setup(name='test',
+setup(name='foobartestignore',
       version='0.1.1',
       python_requires='>=3.6',
       )
