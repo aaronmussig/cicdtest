@@ -1,9 +1,11 @@
 {% set name = "testpackageignore" %}
-{% set version = "0.1.6" %}
 
 package:
   name: {{ name|lower }}
-  version: {{ version }}
+  version: {{ environ.get('PKG_VERSION', '') }}
+
+source:
+  path: ../
 
 build:
   noarch: python
