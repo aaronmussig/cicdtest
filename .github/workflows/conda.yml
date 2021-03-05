@@ -64,6 +64,7 @@ jobs:
           mkdir -p conda_build
       - name: Build conda package
         run: |
+          ls -lah
           conda build conda --output-folder conda_build
       - name: Upload conda build artifacts
         uses: actions/upload-artifact@v2
