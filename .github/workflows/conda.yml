@@ -68,8 +68,6 @@ jobs:
           conda config --add channels ace-internal
           mkdir -p conda_build
       - name: Build conda package
-        env:
-          PKG_VERSION: ${{ github.event.release.tag_name }}
         run: |
           conda build conda --output-folder conda_build
       - name: Upload conda build artifacts
