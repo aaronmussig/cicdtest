@@ -18,7 +18,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install setuptools wheel
           python setup.py sdist bdist_wheel
-      - name: Upload build artifacts
+      - name: Upload python build artifacts
         uses: actions/upload-artifact@v2
         with:
           name: python-dist
@@ -37,35 +37,53 @@ jobs:
     container:
       image: python:3.6-slim
     steps:
-      - name: Download build artifacts
+      - name: Download python build artifacts
         uses: actions/download-artifact@v2
         with:
           name: python-dist
-      - name: Upload
+      - name: Upload python package
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_USER }}
           TWINE_PASSWORD: ${{ secrets.PYPI_PASS }}
         run: |
           ls -lah
-          twine upload *
+          python -m twine upload *
 
   build-conda:
-    needs: build-python
     runs-on: ubuntu-latest
     container:
       image: continuumio/anaconda3:latest
     steps:
-      - name: Configuration
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Conda configuration
         run: |
           conda config --add channels bioconda
           conda config --add channels conda-forge
           conda config --add channels ace-internal
-          mkdir -p /bld
-          rm -rf /bld/*
-      - name: Build
+          mkdir -p conda_build
+      - name: Build conda package
         run: |
-          conda build conda --output-folder /bld
-      - name: Upload
+          conda build conda --output-folder conda_build
+      - name: Upload conda build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: conda-build
+          retention-days: 1
+          path: |
+            conda_build/**.tar.bz2
+
+  upload-conda:
+    needs: build-conda
+    runs-on: ubuntu-latest
+    container:
+      image: continuumio/anaconda3:latest
+    steps:
+      - name: Download conda build artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: conda-build
+      - name: Upload conda package
         run: |
-          ls -lah /bld
-          find /bld/noarch/*.tar.bz2 | xargs anaconda -t ${{ secrets.CONDA_TOKEN }} upload -u ace-internal
+          ls -lah
+          find *.tar.bz2 | xargs anaconda -t ${{ secrets.CONDA_TOKEN }} upload -u ace-internal
