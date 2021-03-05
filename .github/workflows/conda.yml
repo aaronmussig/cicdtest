@@ -3,6 +3,7 @@ name: Package Python and Conda
 on:
   release:
     types: [ published ]
+  workflow_dispatch:
 
 jobs:
   build-python:
