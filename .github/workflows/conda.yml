@@ -1,0 +1,51 @@
+name: Package Python and Conda
+
+on:
+  release:
+    types: [ published ]
+
+jobs:
+  build-python:
+    runs-on: ubuntu-latest
+    container:
+      image: python:3.6-slim
+    steps:
+      - name: Build
+      - uses: actions/checkout@v2
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install setuptools wheel
+          python setup.py sdist bdist_wheel
+      - name: Upload artifacts
+      - uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: |
+            dist/*.tar.gz
+            dist/*.whl
+#
+#  build-python2:
+#    runs-on: ubuntu-latest
+#    container:
+#      image: continuumio/anaconda3:latest
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Versions
+#        run: |
+#          anaconda --version
+#          conda --version
+#          python --version
+#      - name: Setup
+#        run: |
+#          conda config --add channels bioconda
+#          conda config --add channels conda-forge
+#          conda config --add channels ace-internal
+#          mkdir -p /bld
+#          rm -rf /bld/*
+#      - name: Build
+#        run: |
+#          conda build conda --output-folder /bld
+#      - name: Upload
+#        run: |
+#          ls -lah /bld
+#          find /bld/noarch/*.tar.bz2 | xargs anaconda -t X upload -u ace-internal
