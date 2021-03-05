@@ -43,29 +43,24 @@ jobs:
           ls -lah
           python -m pip install .
           python -m unittest discover
-#
-#  build-python2:
-#    runs-on: ubuntu-latest
-#    container:
-#      image: continuumio/anaconda3:latest
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: Versions
-#        run: |
-#          anaconda --version
-#          conda --version
-#          python --version
-#      - name: Setup
-#        run: |
-#          conda config --add channels bioconda
-#          conda config --add channels conda-forge
-#          conda config --add channels ace-internal
-#          mkdir -p /bld
-#          rm -rf /bld/*
-#      - name: Build
-#        run: |
-#          conda build conda --output-folder /bld
-#      - name: Upload
-#        run: |
-#          ls -lah /bld
-#          find /bld/noarch/*.tar.bz2 | xargs anaconda -t X upload -u ace-internal
+
+  build-conda:
+    needs: test-python
+    runs-on: ubuntu-latest
+    container:
+      image: continuumio/anaconda3:latest
+    steps:
+      - name: Configuration
+        run: |
+          conda config --add channels bioconda
+          conda config --add channels conda-forge
+          conda config --add channels ace-internal
+          mkdir -p /bld
+          rm -rf /bld/*
+      - name: Build
+        run: |
+          conda build conda --output-folder /bld
+      - name: Upload
+        run: |
+          ls -lah /bld
+          find /bld/noarch/*.tar.bz2 | xargs anaconda -t ${{ secrets.CONDA_TOKEN }} upload -u ace-internal
