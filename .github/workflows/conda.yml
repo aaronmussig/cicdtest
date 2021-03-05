@@ -46,7 +46,7 @@ jobs:
           TWINE_USERNAME: ${{ secrets.PYPI_USER }}
           TWINE_PASSWORD: ${{ secrets.PYPI_PASS }}
         run: |
-          ls -lah
+          python -m pip install twine
           python -m twine upload *
 
   build-conda:
@@ -75,7 +75,7 @@ jobs:
             conda_build/**.tar.bz2
 
   upload-conda:
-    needs: build-conda
+    needs: [build-conda, build-python]
     runs-on: ubuntu-latest
     container:
       image: continuumio/anaconda3:latest
