@@ -2,6 +2,7 @@ from setuptools import setup
 import os
 import re
 
+from setuptools import setup, find_packages
 
 def read_meta():
     """Read each of the keys stored in __init__.py
@@ -20,5 +21,6 @@ meta = read_meta()
 
 setup(name='foobartestignore',
       version=meta['version'],
+    packages=find_packages(),
       python_requires='>=3.6',
       )
