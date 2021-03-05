@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/aaronmussig/cicdtest/compare/v1.0.0...v1.1.0) (2021-03-05)
+
+
+### Features
+
+* foo ([1f1268e](https://github.com/aaronmussig/cicdtest/commit/1f1268ebafde3fd4a44deaf77d0636730c171b4e))
+
 # 1.0.0 (2021-03-05)
 
 
